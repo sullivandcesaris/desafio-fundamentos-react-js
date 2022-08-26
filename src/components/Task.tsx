@@ -1,41 +1,43 @@
 import styles from './Task.module.css'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 interface TaskProps {
     id: number,
     content: string,
     completed: boolean,
+    onDelete: (task: number) => void,
+    updateTaskCompleted: (id: number, completed: boolean) => void,
 }
 
-export function Task({ id, content, completed } : TaskProps) {
+export function Task({ id, content, completed, onDelete, updateTaskCompleted } : TaskProps) {
 
     const [completedTask, setCompletedTask] = useState(completed)
     
-    const [inputChecked, setInputChecked] = useState(
-            completedTask 
-            ? <input type="checkbox" checked/> 
-            : <input type="checkbox" />
-        )
+    useEffect(() => {
+        handleInputChecked()
+    }, [completedTask])
 
-    function handleInputChecked(event: ChangeEvent<HTMLInputElement>) {
-        if (event.target.checked) {
-            setInputChecked(<input type="checkbox" name="inputChecked" checked/>)
-            setCompletedTask(true)
+    function handleInputChecked() {
+        if (completedTask) {
+            updateTaskCompleted(id, completedTask)
         }else{
-            setInputChecked(<input type="checkbox" />)
-            setCompletedTask(false)
+            updateTaskCompleted(id, completedTask)
         }
     }
 
+    function handleDeleteTask(id: number) {
+        onDelete(id)
+    }
 
+    
     return (
         <article className={styles.task}>
             <label  className={completedTask ? styles.inputChecked : styles.inputNoChecked}>
                 {content}
-                {inputChecked}
+                <input type="checkbox" defaultChecked={completedTask} onClick={() => { setCompletedTask(!completedTask) }}/>
                 <span></span>
             </label>
-            <div>
+            <div onClick={(event: React.MouseEvent<HTMLElement>) => {handleDeleteTask(id)}}>
                 <i className={styles.icon}></i>
             </div>
         </article>

@@ -97,6 +97,7 @@
     display: flex;
     flex-direction: column;
     margin: 4rem 0;
+    padding: 4rem 0;
     border-top: 1px solid var(--gray-400);
 }
 
@@ -122,8 +123,4 @@
     font-weight: 400;
     text-align: center;
     color: var(--gray-300);
-}
-
-.tasksCreated > .noTasks {
-    display: none;
 }
